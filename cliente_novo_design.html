@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seu Orçamento - Volaty Turismo</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#E74C3C;
+    --dark:#0F0F0F;
+    --light:#FAFAFA;
+    --gray:#666;
+  }
+  
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    color:#1a1a1a; 
+    font-family:'Poppins', sans-serif; 
+    min-height:100vh; 
+    padding:40px 20px;
+  }
+
+  .container{
+    max-width:600px;
+    margin:0 auto;
+  }
+
+  .back-link{
+    color:#E74C3C;
+    text-decoration:none;
+    font-size:13px;
+    margin-bottom:32px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    transition:all 0.3s ease;
+  }
+
+  .back-link:hover{
+    gap:12px;
+  }
+
+  .header{
+    margin-bottom:36px;
+  }
+
+  .header h1{
+    margin:0 0 8px 0;
+    font-size:28px;
+    font-weight:700;
+    color:#1a1a1a;
+    letter-spacing:-0.5px;
+  }
+
+  .header p{
+    margin:0;
+    font-size:14px;
+    color:#666;
+  }
+
+  .quote-card{
+    background:white;
+    border-radius:20px;
+    padding:28px;
+    margin-bottom:32px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.05);
+    border:1px solid #f0f0f0;
+  }
+
+  .quote-client{
+    font-weight:700;
+    font-size:16px;
+    margin-bottom:4px;
+    color:#1a1a1a;
+  }
+
+  .quote-route{
+    font-size:13px;
+    color:#666;
+    margin-bottom:20px;
+  }
+
+  .meta{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+
+  .meta-item{
+    background:#f5f5f5;
+    border-radius:12px;
+    padding:12px;
+    border:1px solid #f0f0f0;
+  }
+
+  .meta-label{
+    font-size:11px;
+    color:#999;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin-bottom:4px;
+    font-weight:600;
+  }
+
+  .meta-value{
+    font-size:13px;
+    font-weight:600;
+    color:#1a1a1a;
+  }
+
+  .options-title{
+    font-size:14px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#1a1a1a;
+    margin:0 0 20px 0;
+    opacity:0.7;
+  }
+
+  .option-card{
+    background:white;
+    border:1.5px solid #e8e8e8;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:12px;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    position:relative;
+  }
+
+  .option-card:hover{
+    border-color:#E74C3C;
+    box-shadow:0 4px 12px rgba(231,76,60,0.1);
+    transform:translateY(-2px);
+  }
+
+  .option-card.selected{
+    border-color:#22C55E;
+    background:#f0fdf4;
+    box-shadow:0 4px 12px rgba(34,197,94,0.15);
+  }
+
+  .option-card.disabled{
+    opacity:0.6;
+    cursor:not-allowed;
+  }
+
+  .option-check{
+    position:absolute;
+    top:14px;
+    right:14px;
+    width:32px;
+    height:32px;
+    background:#22C55E;
+    color:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    font-size:18px;
+    display:none;
+  }
+
+  .option-card.selected .option-check{
+    display:flex;
+  }
+
+  .option-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:8px;
+  }
+
+  .option-icon{
+    font-size:28px;
+  }
+
+  .option-name{
+    font-weight:700;
+    font-size:15px;
+    color:#1a1a1a;
+  }
+
+  .option-sub{
+    font-size:13px;
+    color:#666;
+    margin-bottom:12px;
+  }
+
+  .option-price{
+    font-size:20px;
+    font-weight:800;
+    color:#E74C3C;
+    font-family:'Poppins';
+  }
+
+  .empty{
+    color:#999;
+    font-size:14px;
+    padding:32px 20px;
+    text-align:center;
+    background:white;
+    border:1.5px dashed #e8e8e8;
+    border-radius:16px;
+  }
+
+  .success-message{
+    background:rgba(34,197,94,0.08);
+    border:1.5px solid rgba(34,197,94,0.2);
+    border-radius:16px;
+    padding:20px;
+    margin-top:32px;
+    display:none;
+  }
+
+  .success-message.show{
+    display:block;
+    animation:slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn{
+    from{ opacity:0; transform:translateY(-10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .success-icon{
+    font-size:28px;
+    margin-bottom:8px;
+  }
+
+  .success-text{
+    color:#16A34A;
+    font-size:13px;
+    line-height:1.6;
+    font-weight:500;
+  }
+
+  .loading{
+    text-align:center;
+    padding:40px 20px;
+  }
+
+  .spinner{
+    display:inline-block;
+    width:36px;
+    height:36px;
+    border:3px solid #e8e8e8;
+    border-top-color:#E74C3C;
+    border-radius:50%;
+    animation:spin 0.8s linear infinite;
+  }
+
+  @keyframes spin{
+    to{ transform:rotate(360deg); }
+  }
+
+  .setup-banner{
+    background:rgba(239,68,68,0.08);
+    border:1.5px solid rgba(239,68,68,0.2);
+    border-radius:12px;
+    padding:14px 16px;
+    font-size:13px;
+    color:#DC2626;
+    margin-bottom:24px;
+    display:none;
+    line-height:1.6;
+  }
+
+  @media (max-width:600px){
+    .container{ padding:0; }
+    .quote-card{ padding:20px; }
+    .option-card{ padding:16px; }
+    .header h1{ font-size:24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="javascript:history.back()" class="back-link">← Voltar</a>
+
+  <div class="header">
+    <h1>✈️ Seu Orçamento</h1>
+    <p>Escolha a opção que melhor se encaixa para você</p>
+  </div>
+
+  <div class="setup-banner" id="setupBanner">
+    ⚠️ Não foi possível carregar o orçamento. Verifique a conexão.
+  </div>
+
+  <div id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p style="margin-top:16px; color:#666; font-size:13px;">Carregando...</p>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+  import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBhdZWn2O1gcOOdfVmJU7VOw0F3T-Ja-Yc",
+    authDomain: "volaty-c0808.firebaseapp.com",
+    databaseURL: "https://volaty-c0808-default-rtdb.firebaseio.com",
+    projectId: "volaty-c0808",
+    storageBucket: "volaty-c0808.firebasestorage.app",
+    messagingSenderId: "140086466923",
+    appId: "1:140086466923:web:1caa0fee969b601722142e"
+  };
+
+  let db = null;
+  try {
+    const app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+  } catch (e) {
+    document.getElementById('setupBanner').style.display = 'block';
+  }
+
+  function getUrlParam(name) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name);
+  }
+
+  async function loadQuote() {
+    const quoteId = getUrlParam('id');
+    if (!quoteId || !db) {
+      document.getElementById('content').innerHTML = '<div class="empty">Orçamento não encontrado</div>';
+      return;
+    }
+
+    try {
+      const quoteRef = ref(db, 'orcamentos/' + quoteId);
+      const snapshot = await get(quoteRef);
+
+      if (!snapshot.exists()) {
+        document.getElementById('content').innerHTML = '<div class="empty">Este orçamento não existe ou foi deletado</div>';
+        return;
+      }
+
+      const quote = snapshot.val();
+      
+      try {
+        await update(ref(db, 'orcamentos/' + quoteId), { viewedAt: Date.now() });
+      } catch(e) {}
+
+      renderQuote(quote, quoteId);
+    } catch (e) {
+      document.getElementById('content').innerHTML = '<div class="empty">Erro ao carregar: ' + e.message + '</div>';
+    }
+  }
+
+  function renderQuote(quote, quoteId) {
+    const fares = quote.fares || [];
+    
+    const metaHtml = `
+      <div class="meta">
+        <div class="meta-item">
+          <div class="meta-label">Agência</div>
+          <div class="meta-value">${escape(quote.agencyName || 'Volaty')}</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Data</div>
+          <div class="meta-value">${escape(quote.date || '-')}</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Origem</div>
+          <div class="meta-value">${escape(quote.origin?.city || '-')}</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Destino</div>
+          <div class="meta-value">${escape(quote.destination?.city || '-')}</div>
+        </div>
+      </div>
+    `;
+    
+    const html = `
+      <div class="quote-card">
+        <div class="quote-client">${escape(quote.clientName || 'Seu Orçamento')}</div>
+        <div class="quote-route">${escape((quote.origin?.code)||'?')} → ${escape((quote.destination?.code)||'?')}</div>
+        ${metaHtml}
+      </div>
+
+      <h3 class="options-title">Escolha uma opção</h3>
+
+      ${fares.length > 0 ? fares.map((fare, i) => `
+        <div class="option-card" onclick="selectFare('${quoteId}', '${fare.id}', ${i})" data-fare="${fare.id}">
+          <div class="option-check">✓</div>
+          <div class="option-header">
+            <div class="option-icon">${escape(fare.icon || '✈')}</div>
+            <div class="option-name">${escape(fare.label || 'Opção')}</div>
+          </div>
+          <div class="option-sub">${escape(fare.sub || '')}</div>
+          <div class="option-price">R$ ${format(fare.price)}</div>
+        </div>
+      `).join('') : '<div class="empty">Nenhuma opção disponível</div>'}
+
+      <div class="success-message" id="successMsg">
+        <div class="success-icon">✓</div>
+        <div class="success-text">Sua escolha foi registrada! Entraremos em contato com os próximos passos.</div>
+      </div>
+    `;
+
+    document.getElementById('content').innerHTML = html;
+  }
+
+  window.selectFare = async function(quoteId, fareId, index) {
+    if (!db) return;
+    
+    try {
+      const quoteRef = ref(db, 'orcamentos/' + quoteId);
+      const snapshot = await get(quoteRef);
+      const quote = snapshot.val();
+      const fare = quote.fares[index];
+
+      await update(quoteRef, {
+        selection: {
+          id: fare.id,
+          label: fare.label,
+          price: fare.price,
+          selectedAt: Date.now()
+        }
+      });
+
+      const successMsg = document.getElementById('successMsg');
+      successMsg.classList.add('show');
+
+      document.querySelectorAll('.option-card').forEach(el => {
+        el.classList.add('disabled');
+        el.onclick = null;
+      });
+
+      document.querySelectorAll('.option-card').forEach(el => el.classList.remove('selected'));
+      document.querySelector(`[data-fare="${fareId}"]`).classList.add('selected');
+
+    } catch (e) {
+      alert('Erro ao registrar: ' + e.message);
+    }
+  };
+
+  function format(value) {
+    return (parseFloat(value) || 0).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+  }
+
+  function escape(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  loadQuote();
+</script>
+
+</body>
+</html>
